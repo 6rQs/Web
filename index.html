@@ -1,215 +1,479 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minecraft Bedrock</title>
-  <style>
-    :root {
-      --primary: #8a2be2;
-      --primary-dark: #6a1cb2;
-      --secondary: #00bfff;
-      --background: #121212;
-      --card-bg: #1e1e1e;
-      --text: #ffffff;
-      --hover-glow: 0 0 15px rgba(138, 43, 226, 0.5);
-    }
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0; padding: 0;
-      transition: all 0.3s ease;
-    }
-    body {
-      font-family: 'Arial', sans-serif;
-      background: var(--background);
-      background-image: linear-gradient(to bottom right, rgba(138,43,226,0.1), rgba(0,191,255,0.05));
-      color: var(--text);
-      min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center;
-      padding: 20px;
-    }
-    .header {
-      display: flex; flex-direction: column; align-items: center;
-      margin-bottom: 30px;
-    }
-    .logo {
-      width: 120px; height: 120px; border-radius: 50%;
-      margin-bottom: 15px;
-      box-shadow: 0 0 20px rgba(138,43,226,0.6);
-      border: 3px solid var(--primary);
-      object-fit: cover;
-    }
-    h1 {
-      font-size: 42px; font-weight: 800; letter-spacing: 2px;
-      text-shadow: 0 0 10px rgba(138,43,226,0.7);
-    }
-    h2 {
-      font-size: 22px; color: var(--secondary);
-      font-weight: 600; letter-spacing: 1px;
-      margin-bottom: 10px;
-    }
-    .social-icons {
-      display: flex; gap: 10px; margin: 5px 0;
-    }
-    .social-icon {
-      width: 45px; height: 45px; border-radius: 10px;
-      cursor: pointer; filter: drop-shadow(0 0 3px rgba(255,255,255,0.3));
-    }
-    .social-icon:hover {
-      transform: scale(1.15) rotate(5deg);
-      filter: drop-shadow(0 0 8px rgba(138,43,226,0.8));
-    }
-    .container {
-      width: 100%; max-width: 375px;
-    }
-    .section {
-      background: var(--card-bg); border-radius: 12px;
-      overflow: hidden; position: relative;
-      border: 1px solid rgba(138,43,226,0.3);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-    .section:hover {
-      transform: translateY(-5px); box-shadow: var(--hover-glow);
-    }
-    .section-title {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #fff; font-size: 22px; font-weight: bold;
-      padding: 15px; text-align: center;
-      text-transform: uppercase; letter-spacing: 2px;
-    }
-    .glow-effect {
-      position: absolute; bottom: 0; left: 0;
-      width: 100%; height: 5px;
-      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary));
-      background-size: 200% 100%;
-      animation: glow 3s linear infinite;
-    }
-    @keyframes glow {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 200% 50%; }
-    }
-    .section-content {
-      display: grid; grid-template-columns: repeat(2,1fr);
-      gap: 3px; padding: 10px;
-    }
-    .button {
-      margin: 4px; padding: 10px;
-      background: rgba(255,255,255,0.08);
-      color: var(--text); text-align: center;
-      border-radius: 8px; cursor: pointer;
-      font-weight: 600; font-size: 16px;
-      position: relative; overflow: hidden; z-index: 1;
-      display: flex; align-items: center; justify-content: center;
-      gap: 8px;
-    }
-    .button::before {
-      content: ''; position: absolute;
-      top: 0; left: -100%; width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(138,43,226,0.2), transparent);
-      transition: all 0.5s; z-index: -1;
-    }
-    .button:hover {
-      background: rgba(138,43,226,0.2);
-      transform: translateY(-3px);
-      box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-    }
-    .button:hover .emoji { transform: scale(1.2); }
-    .button:hover::before { left: 100%; }
-    .marketplace-button { font-size: 18px; }
-    .emoji { font-size: 1.2em; transition: transform 0.3s ease; }
-    .tall { grid-column: span 2; }
-    @media (max-width:500px){ h1{font-size:42px;} }
-
-    .modal-overlay {
-      display: none; position: fixed; top:0; left:0;
-      width:100vw; height:100vh;
-      background: rgba(0,0,0,0.7);
-      justify-content: center; align-items: center;
-      z-index: 1000;
-    }
-    .modal {
-      background: var(--card-bg);
-      border-radius: 15px;
-      padding: 30px 20px;
-      width: 90%; max-width: 320px;
-      text-align: center;
-      box-shadow: 0 0 25px rgba(138,43,226,0.6);
-    }
-    .modal h3 {
-      font-size: 22px; color: var(--primary);
-      margin-bottom: 20px;
-    }
-    .version-buttons {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-    .version-buttons .button {
-      width: 100%; font-size: 16px; padding: 10px 0;
-    }
-    .close-btn {
-      background-color: #b22222;
-    }
-    .close-btn:hover {
-      background-color: #d03d3d;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>@SnowDLC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+        
+        body {
+            background-color: #0a0f1a;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+        
+        #snow-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 0;
+        }
+        
+        .container {
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            margin-top: -12vh;
+            animation: fadeIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform, opacity;
+        }
+        
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px) scale(0.98); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+        
+        .profile-header {
+            margin-bottom: 18px;
+            animation: slideDown 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s both;
+            will-change: transform, opacity;
+        }
+        
+        @keyframes slideDown {
+            from { 
+                opacity: 0; 
+                transform: translateY(-25px) scale(0.95); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+        
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 12px;
+            border: 3px solid #fff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            will-change: transform, box-shadow;
+        }
+        
+        .profile-image:hover {
+            transform: scale(1.08) translateZ(0);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.7);
+        }
+        
+        .profile-name {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 3px #fff, 0 0 8px rgba(255,255,255,0.8);
+            animation: textGlowWhite 2.5s ease-in-out infinite alternate;
+            will-change: text-shadow;
+        }
+        
+        @keyframes textGlowWhite {
+            0% { text-shadow: 0 0 2px #fff, 0 0 6px rgba(255,255,255,0.6); }
+            100% { text-shadow: 0 0 6px #fff, 0 0 14px rgba(255,255,255,0.9); }
+        }
+        
+        .profile-username {
+            color: #ccc;
+            margin-bottom: 12px;
+            font-size: 18px;
+            font-weight: 400;
+        }
+        
+        .profile-bio {
+            margin-bottom: 18px;
+            padding: 0 10px;
+            color: #ddd;
+            font-size: 16px;
+            line-height: 1.6;
+            animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s both;
+            will-change: transform, opacity;
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(15px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 18px;
+            animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s both;
+            will-change: transform, opacity;
+        }
+        
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            text-decoration: none;
+            font-size: 24px;
+            transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            will-change: transform, background-color, box-shadow;
+        }
+        
+        .social-icon:hover {
+            background-color: #fff;
+            color: #000;
+            transform: scale(1.15);
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+        }
+        
+        .social-icon.discord:hover {
+            background-color: #5865F2;
+            color: #fff;
+            box-shadow: 0 0 12px #ffffffaa, 0 0 4px #fff;
+        }
+        
+        .social-icon.youtube:hover {
+            background-color: #FF0000;
+            color: #fff;
+            box-shadow: 0 0 12px #ffffffaa, 0 0 4px #fff;
+        }
+        
+        .social-icon.tiktok:hover {
+            background-color: #000000;
+            color: #ffffff;
+            box-shadow: 0 0 12px #ffffffaa, 0 0 4px #fff;
+        }
+        
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            animation: fadeInUp 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both;
+            will-change: transform, opacity;
+        }
+        
+        .link-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            cursor: pointer;
+            will-change: transform, box-shadow, border-color, background-color;
+            box-shadow: 0 0 3px rgba(255,255,255,0.5), 0 0 0px rgba(255,255,255,0);
+        }
+        
+        .link-item:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 8px #ffffff, 0 0 12px rgba(255,255,255,0.7);
+            border-color: rgba(255, 255, 255, 0.7);
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+        
+        .link-icon-left {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #fff;
+            transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform, color;
+        }
+        
+        .link-item:hover .link-icon-left {
+            transform: translateY(-50%) scale(1.15) rotate(5deg);
+            color: #ffffff;
+            text-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+        }
+        
+        .link-icon-right {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #fff;
+            transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform, color;
+        }
+        
+        .link-item:hover .link-icon-right {
+            transform: translateY(-50%) scale(1.15) rotate(5deg);
+            color: #ffffff;
+            text-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+        }
+        
+        .link-text {
+            font-weight: 500;
+            font-size: 16px;
+            text-align: center;
+            flex: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .link-item:hover .link-text {
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                max-width: 360px;
+                padding: 10px;
+                margin-top: -15vh;
+            }
+            .profile-image {
+                width: 100px;
+                height: 100px;
+            }
+            .profile-name {
+                font-size: 28px;
+            }
+            .profile-username {
+                font-size: 16px;
+            }
+            .link-item {
+                padding: 12px 18px;
+            }
+            .link-icon-left {
+                left: 16px;
+                font-size: 16px;
+                width: 20px;
+                height: 20px;
+            }
+            .link-icon-right {
+                right: 16px;
+                font-size: 16px;
+                width: 20px;
+                height: 20px;
+            }
+            .social-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 22px;
+            }
+            .social-links {
+                gap: 12px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .container {
+                max-width: 320px;
+                margin-top: -18vh;
+            }
+            .link-item {
+                padding: 10px 16px;
+            }
+            .link-icon-left {
+                left: 14px;
+                font-size: 15px;
+                width: 18px;
+                height: 18px;
+            }
+            .link-icon-right {
+                right: 14px;
+                font-size: 15px;
+                width: 18px;
+                height: 18px;
+            }
+            .social-icon {
+                width: 42px;
+                height: 42px;
+                font-size: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-
-  <div class="header">
-    <img class="logo" src="https://i.pinimg.com/736x/d3/1d/07/d31d07313f89289e06d6cae9a38d998e.jpg" alt="Yasho Logo">
-    <h1>YASHO</h1>
-    <h2>FREE</h2>
-    <div class="social-icons">
-      <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube" onclick="window.open('https://www.youtube.com/@Vultir','_blank')">
-      <img class="social-icon" src="https://sf-static.tiktokcdn.com/obj/eden-sg/uhtyvueh7nulogpoguhm/tiktok-icon2.png" alt="TikTok" onclick="window.open('https://www.tiktok.com/@yashomc','_blank')">
-      <img class="social-icon" src="https://art.pixilart.com/47700d2e75da.png" alt="Discord" onclick="window.open('https://discord.gg/fvfd45bR2g','_blank')">
+    <canvas id="snow-canvas"></canvas>
+    
+    <div class="container">
+        <header class="profile-header">
+            <img src="https://p16-common-sign.tiktokcdn.com/tos-alisg-avt-0068/c9aec98234603119ce0f7531b727a43d~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=14579&refresh_token=7dd9f0d2&x-expires=1777964400&x-signature=YLaUFlFb18cv%2FxGt64QceoOVuwQ%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=my3" alt="Crafty" class="profile-image">
+            
+            <div class="social-links">
+                <a href="https://discord.gg/MtDaYAwbN9" class="social-icon discord" target="_blank" rel="noopener">
+                    <i class="fab fa-discord"></i>
+                </a>
+                <a href="https://www.tiktok.com/@snowdlc" class="social-icon tiktok" target="_blank" rel="noopener">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+                <a href="https://www.youtube.com/@snowdlc" class="social-icon youtube" target="_blank" rel="noopener">
+                    <i class="fab fa-youtube"></i>
+                </a>
+            </div>
+        </header>
+        
+        <main class="links-container">
+            <a href="https://snowmc.onrender.com" class="link-item" target="_blank" rel="noopener">
+                <div class="link-icon-left"><i class="fas fa-shopping-cart"></i></div>
+                <div class="link-text">Download</div>
+                <div class="link-icon-right"><i class="fas fa-download"></i></div>
+            </a>
+        </main>
     </div>
-  </div>
 
-  <div class="container">
-    <div class="section">
-      <div class="section-title">🎮 Minecraft 🎮</div>
-      <div class="glow-effect"></div>
-      <div class="section-content">
-        <div class="button" onclick="window.open('https://mcbemap.github.io/dl/', '_blank')"><span class="emoji">🗺️</span> Maps</div>
-        <div class="button" onclick="window.open('https://mcbeaddon.github.io/new/', '_blank')"><span class="emoji">🧩</span> Addons</div>
-        <div class="button" onclick="window.open('https://mcbeshader.github.io/dl/', '_blank')"><span class="emoji">✨</span> Shaders</div>
-        <div class="button" onclick="window.open('https://mcbeclient.github.io/dl/', '_blank')"><span class="emoji">🖥️</span> Clients</div>
-        <div class="button" onclick="window.open('https://mcbepack.github.io/dl/', '_blank')"><span class="emoji">🌄</span> Textures</div>
-        <div class="button" onclick="window.open('https://mcbeskin.github.io/dl/', '_blank')"><span class="emoji">👕</span> Skins</div>
-        <div class="button" onclick="window.open('https://mcbemodpack.github.io/dl/', '_blank')"><span class="emoji">🐉</span> ModPacks</div>
-        <div class="button marketplace-button" onclick="openMarketplaceModal()"><span class="emoji">🛒</span> Marketplace</div>
-        <div class="button tall" onclick="window.open('https://mcdlfree.github.io/w/', '_blank')">
-          ⬇️ Download Minecraft ⬇️
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-overlay" id="marketplaceModal">
-    <div class="modal">
-      <h3>Select Version</h3>
-      <div class="version-buttons">
-        <div class="button" onclick="window.open('https://craftydlc.netlify.app/','_blank')">🔹 V1</div>
-        <div class="button" onclick="window.open('https://marketplacedlc.netlify.app/','_blank')">🔸 V2</div>
-      </div>
-      <div class="button close-btn" onclick="closeMarketplaceModal()">❌ Close</div>
-    </div>
-  </div>
-
-  <script>
-    function openMarketplaceModal() {
-      document.getElementById('marketplaceModal').style.display = 'flex';
-    }
-    function closeMarketplaceModal() {
-      document.getElementById('marketplaceModal').style.display = 'none';
-    }
-    document.getElementById('marketplaceModal').addEventListener('click', e => {
-      if (e.target === e.currentTarget) closeMarketplaceModal();
-    });
-  </script>
+    <script>
+        (function() {
+            const canvas = document.getElementById('snow-canvas');
+            if (!canvas) return;
+            let ctx = canvas.getContext('2d');
+            let width = window.innerWidth;
+            let height = window.innerHeight;
+            let snowflakes = [];
+            
+            const FLAKE_COUNT = 42;
+            const MIN_RADIUS = 0.8;
+            const MAX_RADIUS = 2.6;
+            
+            function resizeCanvas() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+            }
+            
+            class Snowflake {
+                constructor() {
+                    this.reset();
+                }
+                reset() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * -height * 0.5;
+                    this.radius = MIN_RADIUS + Math.random() * (MAX_RADIUS - MIN_RADIUS);
+                    this.speedY = 0.4 + Math.random() * 1.0;
+                    this.speedX = (Math.random() - 0.5) * 0.12;
+                    this.opacity = 0.65 + Math.random() * 0.35;
+                    this.glowIntensity = 1.2 + Math.random() * 2.0;
+                }
+                update() {
+                    this.y += this.speedY;
+                    this.x += this.speedX;
+                    if (this.y > height + 30 || this.x < -30 || this.x > width + 30) {
+                        this.y = -15;
+                        this.x = Math.random() * width;
+                    }
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.shadowColor = `rgba(255, 255, 255, 0.85)`;
+                    ctx.shadowBlur = this.glowIntensity;
+                    ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                    ctx.fill();
+                    if (this.radius > 1.6) {
+                        ctx.shadowBlur = this.glowIntensity * 0.8;
+                        ctx.fillStyle = `rgba(255, 255, 245, 0.7)`;
+                        ctx.fill();
+                    }
+                    ctx.shadowBlur = 0;
+                }
+            }
+            
+            function initSnow() {
+                snowflakes = [];
+                for (let i = 0; i < FLAKE_COUNT; i++) {
+                    let flake = new Snowflake();
+                    flake.y = Math.random() * height;
+                    flake.x = Math.random() * width;
+                    snowflakes.push(flake);
+                }
+            }
+            
+            function animateSnow() {
+                if (!ctx) return;
+                ctx.clearRect(0, 0, width, height);
+                for (let flake of snowflakes) {
+                    flake.update();
+                    flake.draw();
+                }
+                requestAnimationFrame(animateSnow);
+            }
+            
+            window.addEventListener('resize', () => {
+                resizeCanvas();
+                initSnow();
+            });
+            
+            resizeCanvas();
+            initSnow();
+            animateSnow();
+        })();
+    </script>
 </body>
 </html>
